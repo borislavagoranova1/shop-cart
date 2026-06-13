@@ -1,1 +1,387 @@
 # shop-cart
+<!DOCTYPE html>
+<!-- saved from url=(0070)file:///C:/Users/Lenovo/Downloads/gemini-code-1781361756068%20(1).html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopping Cart App - Blue Gradient Theme</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com/">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+  <link href="./shop_files/css2" rel="stylesheet">
+  
+  <style>
+    /* Глобални стилове с преливащ фон в синьо (от по-тъмно към по-светло) */
+    body {
+      font-family: 'Nunito', sans-serif;
+      /* Плавно преливане от тъмносиньо в горната част към по-светло синьо в долната */
+      background: linear-gradient(180deg, #2b79ad, #40adf5, #83cafa); 
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    /* Основна карта на приложението в стилно синьо */
+    .app-card {
+      background: linear-gradient(135deg, #2e4053, #466683); /* Елегантно тъмносиво-синьо */
+      color: white;
+      padding: 30px;
+      border-radius: 24px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 15px 35px rgba(28, 40, 51, 0.4);
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-top: 0;
+      margin-bottom: 25px;
+      letter-spacing: 0.5px;
+      color: #ebf5fb; /* Изключително светло синьо-бяло за заглавието */
+    }
+
+    /* Контейнер за избор на продукт */
+    .search-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 25px;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .search-box label {
+      white-space: nowrap;
+      color: #a9dfbf; /* Фин акцент за текста на етикета */
+    }
+
+    select {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 600;
+      flex-grow: 1;
+      padding: 10px 12px;
+      border: 2px solid #5dade2;
+      border-radius: 10px;
+      background-color: #fafafa;
+      color: #212f3d;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    /* Светлосин бутон за добавяне */
+    #add-btn {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      background-color: #5dade2;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    #add-btn:hover {
+      background-color: #3498db;
+      transform: scale(1.03);
+    }
+
+    /* Визуализация на количката */
+    .cart-display {
+      margin-bottom: 20px;
+    }
+
+    .cart-header {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: #a9dfbf;
+    }
+
+    /* Скролиращ контейнер за продуктите */
+    .cart-items-container {
+      max-height: 110px;
+      overflow-y: auto;
+      margin-bottom: 15px;
+      padding: 0 5px;
+    }
+
+    /* Стил на добавените редове с продукти */
+    .cart-item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.12);
+      padding: 8px 12px;
+      border-radius: 8px;
+      margin-bottom: 6px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border-left: 3px solid #5dade2; /* Син декоративен маркер */
+    }
+
+    .item-remove {
+      background: none;
+      border: none;
+      color: #f1948a;
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 0.95rem;
+      padding: 2px 5px;
+    }
+
+    .item-remove:hover {
+      color: #ec7063;
+    }
+
+    /* Голямата обща сума */
+    .total-price {
+      font-size: 3.5rem;
+      font-weight: 800;
+      margin: 10px 0 2px 0;
+      color: #5dade2; /* Основен син цвят за цената */
+    }
+
+    .status-text {
+      font-size: 1.1rem;
+      font-weight: 600;
+      opacity: 0.85;
+      margin-bottom: 20px;
+    }
+
+    /* Информационна лента за общия брой артикули */
+    .info-bar {
+      background-color: rgba(255, 255, 255, 0.15);
+      padding: 10px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      letter-spacing: 0.5px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Долни контролни бутони */
+    .actions-container {
+      display: flex;
+      gap: 10px;
+    }
+
+    .checkout-btn, .clear-btn {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      border: none;
+      padding: 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.95rem;
+    }
+
+    /* Бутон за завършване на поръчката в син цвят */
+    .checkout-btn {
+      background-color: #5dade2;
+      color: white;
+    }
+
+    .checkout-btn:hover:not(:disabled) {
+      background-color: #3498db;
+      box-shadow: 0 4px 12px rgba(93, 173, 226, 0.3);
+    }
+
+    .checkout-btn:disabled {
+      background-color: rgba(255, 255, 255, 0.2);
+      color: rgba(255, 255, 255, 0.4);
+      cursor: not-allowed;
+    }
+
+    /* Прозрачен бутон с рамка за изчистване */
+    .clear-btn {
+      background-color: transparent;
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+
+    .clear-btn:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Настройки на скролбара */
+    .cart-items-container::-webkit-scrollbar {
+      width: 5px;
+    }
+    .cart-items-container::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-card">
+    <header>
+      <h1>Shopping Cart</h1>
+    </header>
+
+    <main>
+      <div class="search-box">
+        <label for="product-select">Select item:</label>
+        <select id="product-select">
+          <option value="1">Wireless Headphones ($59.99)</option><option value="2">Mechanical Keyboard ($89.50)</option><option value="3">Gaming Mouse Pad ($15.00)</option><option value="4">USB-C Adapter Hub ($24.99)</option><option value="5">Portable Power Bank ($34.00)</option></select>
+        <button id="add-btn">Add</button>
+      </div>
+
+      <div class="cart-display">
+        <div class="cart-header">
+          <span class="cart-title">Your Cart</span> 🛍️
+        </div>
+        
+        <div id="cart-items" class="cart-items-container"></div>
+
+        <div class="total-price">$<span id="total-price">0.00</span></div>
+        <div id="cart-status" class="status-text">Your cart is empty</div>
+      </div>
+
+      <div class="info-bar">
+        Total Items: <span id="total-count">0</span>
+      </div>
+
+      <div class="actions-container">
+        <button id="checkout-btn" class="checkout-btn" disabled="">Proceed to Checkout</button>
+        <button id="clear-btn" class="clear-btn">Clear Cart</button>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // 1. ДАННИ: Списък с продукти в магазина (Променливи, типове данни и масиви) [cite: 29, 32, 58, 67, 79]
+    const catalogProducts = [
+      { id: 1, name: "Wireless Headphones", price: 59.99 },
+      { id: 2, name: "Mechanical Keyboard", price: 89.50 },
+      { id: 3, name: "Gaming Mouse Pad", price: 15.00 },
+      { id: 4, name: "USB-C Adapter Hub", price: 24.99 },
+      { id: 5, name: "Portable Power Bank", price: 34.00 }
+    ];
+
+    // 2. СЪСТОЯНИЕ: Списък на добавените продукти в количката [cite: 32, 58, 79]
+    let activeCart = [];
+
+    // 3. DOM СЕЛЕКТОРИ: Свързване с HTML елементите (Управление на DOM) [cite: 31, 57, 74, 75]
+    const productSelect = document.getElementById('product-select');
+    const addBtn = document.getElementById('add-btn');
+    const cartItemsContainer = document.getElementById('cart-items');
+    const totalPriceDisplay = document.getElementById('total-price');
+    const cartStatusDisplay = document.getElementById('cart-status');
+    const totalCountDisplay = document.getElementById('total-count');
+    const checkoutBtn = document.getElementById('checkout-btn');
+    const clearBtn = document.getElementById('clear-btn');
+
+    // 4. ФУНКЦИОНАЛНОСТ (ЛОГИКА)
+
+    // Зареждане на менюто с продукти чрез цикъл (Цикли) [cite: 30, 52, 70, 73]
+    function initializeCatalog() {
+      for (let i = 0; i < catalogProducts.length; i++) {
+        const item = catalogProducts[i];
+        const optionElement = document.createElement('option');
+        optionElement.value = item.id;
+        optionElement.textContent = `${item.name} ($${item.price.toFixed(2)})`;
+        productSelect.appendChild(optionElement);
+      }
+    }
+
+    // Добавяне на продукт към количката (Работа с масиви и търсене) [cite: 32, 58, 80, 81]
+    function handleAddItem() {
+      const selectedId = parseInt(productSelect.value);
+      const matchedItem = catalogProducts.find(p => p.id === selectedId);
+
+      if (matchedItem) {
+        const structuralDuplicate = activeCart.find(c => c.id === selectedId);
+
+        if (structuralDuplicate) {
+          // Увеличаване на количеството при вече съществуващ продукт (Оператори) [cite: 29, 69]
+          structuralDuplicate.quantity += 1;
+        } else {
+          // Добавяне на нов обект в масива [cite: 80]
+          activeCart.push({
+            id: matchedItem.id,
+            name: matchedItem.name,
+            price: matchedItem.price,
+            quantity: 1
+          });
+        }
+        renderCart();
+      }
+    }
+
+    // Премахване на продукт от количката (Филтриране на масив) [cite: 32, 80, 81]
+    function dropCartItem(idToDrop) {
+      activeCart = activeCart.filter(c => c.id !== idToDrop);
+      renderCart();
+    }
+
+    // Обновяване на интерфейса (Условни конструкции if/else, оператори и DOM) [cite: 30, 31, 52, 57, 72, 76]
+    function renderCart() {
+      cartItemsContainer.innerHTML = "";
+      
+      let dynamicSumTotal = 0;
+      let dynamicCountTotal = 0;
+
+      // Проверка за празна количка (Условна конструкция) [cite: 30, 72]
+      if (activeCart.length === 0) {
+        cartStatusDisplay.textContent = "Your cart is empty";
+        checkoutBtn.disabled = true;
+      } else {
+        cartStatusDisplay.textContent = "Items ready for purchase";
+        checkoutBtn.disabled = false;
+
+        // Итериране през количката чрез цикъл за изчисляване на сумите [cite: 30, 73]
+        for (let i = 0; i < activeCart.length; i++) {
+          const activeUnit = activeCart[i];
+          dynamicCountTotal += activeUnit.quantity;
+          dynamicSumTotal += (activeUnit.price * activeUnit.quantity); // Математически оператори [cite: 29, 69]
+
+          // Динамично създаване на HTML елементи [cite: 31, 57, 76]
+          const itemRow = document.createElement('div');
+          itemRow.className = "cart-item-row";
+          itemRow.innerHTML = `
+            <span>${activeUnit.name} (x${activeUnit.quantity})</span>
+            <button class="item-remove" onclick="dropCartItem(${activeUnit.id})">✕</button>
+          `;
+          cartItemsContainer.appendChild(itemRow);
+        }
+      }
+
+      // Актуализиране на текстовото съдържание в DOM [cite: 76]
+      totalPriceDisplay.textContent = dynamicSumTotal.toFixed(2);
+      totalCountDisplay.textContent = dynamicCountTotal;
+    }
+
+    // 5. СЪБИТИЯ (Event Listeners за интерактивност) [cite: 31, 57, 77]
+    addBtn.addEventListener('click', handleAddItem);
+
+    clearBtn.addEventListener('click', () => {
+      activeCart = [];
+      renderCart();
+    });
+
+    checkoutBtn.addEventListener('click', () => {
+      alert(`🛒 Checkout complete! Total paid: $${totalPriceDisplay.textContent}`);
+      activeCart = [];
+      renderCart();
+    });
+
+    // Стартиране на приложението
+    initializeCatalog();
+    renderCart();
+  </script>
+
+
+</body></html>
